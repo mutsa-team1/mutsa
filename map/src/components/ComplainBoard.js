@@ -60,10 +60,10 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleLike = (index) => {
+  const handleLike = (id) => {
     setCards((prev) =>
-      prev.map((card, idx) =>
-        idx === index ? { ...card, likes: card.likes + 1 } : card
+      prev.map((card) =>
+        card.id === id ? { ...card, likes: card.likes + 1 } : card
       )
     );
   };
@@ -139,7 +139,7 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
               <ComplainCard
                 content={card.content}
                 likes={card.likes}
-                onLike={() => handleLike(index)}
+                onLike={() => handleLike(card.id)}
                 color={safeColor}
               />
             </div>
