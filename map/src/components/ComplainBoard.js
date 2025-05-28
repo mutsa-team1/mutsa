@@ -4,43 +4,36 @@ import AddButton from "./AddButton";
 import NewPostit from "./NewPostIt";
 import RecentLine from "./RecentLine";
 import ComplainPostit from "./ComplainPostIt";
-import { dummyComplains } from "../data/dummyComplains"; // 더미 데이터로 분리함 (INITIAL_ROWS 였던 것...)
-import { AddButtonContainer, BoardContainer, CloseButton, GridContainer, GridItem } from "../styles/ComplainBoard.styles";
+import { dummyComplains } from "../data/dummyComplains";
+import { AddButtonContainer, BoardContainer, CloseButton, GridContainer, GridItem, GridRow } from "../styles/ComplainBoard.styles";
 
-const CARD_COLORS = ["#F8BDBD", "#C5CAE9", "#DCEFBF", "#FFF59D", "#C3AEE5", "#A0D3FA"];
+const ROW_COLORS = {
+  1: ["#F8BDBD"],
+  2: ["#C5CAE9", "#DCEFBF", "#FFF59D"],
+  3: ["#C3AEE5", "#A0D3FA"],
+};
 
-/**
- * 카드 배열을 받아서 각 row에 공감수 비율로 span 계산
- * - index 기반으로 row를 지정
- * - 각 row에서 likes 총합을 기준으로 비율 계산
- * @param {Array} cards
- * @returns {Array} row, span이 계산된 카드 배열
- */
+
 function calculateSpans(cards) {
-  // likes 순으로 내림차순 정렬
   const sorted = [...cards].sort((a, b) => b.likes - a.likes);
-
-  // 순위대로 배치 
   const order = [0, 5, 4, 2, 1, 3];
   const rows = { 1: [], 2: [], 3: [] };
 
-  // 각 카드의 실제 위치 결정하기
   order.forEach((sortedIdx, placementIdx) => {
     const card = sorted[sortedIdx];
     if (!card) return;
 
-    if (placementIdx === 0) rows[1].push(card); // 1열: 1등
-    else if (placementIdx >= 1 && placementIdx <= 3) rows[2].push(card); // 2열: 6, 5, 3등
-    else rows[3].push(card); // 3열: 2, 4등
-  })
+    if (placementIdx === 0) rows[1].push(card);
+    else if (placementIdx >= 1 && placementIdx <= 3) rows[2].push(card);
+    else rows[3].push(card);
+  });
 
-  // 각 row에서 공감 수 비율로 span 계산
   const spans = [];
   Object.entries(rows).forEach(([row, rowCards]) => {
     const totalLikes = rowCards.reduce((sum, c) => sum + c.likes, 0);
     rowCards.forEach((card) => {
       const ratio = card.likes / totalLikes;
-      const span = Math.round(ratio * 12);
+      const span = ratio * 12; // 정수로 반올림하지 않고 그대로 소수점 유지
       spans.push({ ...card, row: Number(row), span: Math.max(span, 1) });
     });
   });
@@ -48,16 +41,10 @@ function calculateSpans(cards) {
   return spans;
 }
 
-/**
- * ComplainBoard 컴포넌트
- * - isOpen: 열림 여부
- * - buildingName: 제목으로 표시될 건물명
- * - onClose: 닫기 버튼 클릭 시 실행할 콜백
- */
 function ComplainBoard({ isOpen, buildingName, onClose }) {
-  const [isAdding, setIsAdding] = useState(false); // 새로운 포스트잇 작성 중 여부부
-  const [posts, setPosts] = useState([]); // 새로운 포스트잇 목록 
-  const [cards, setCards] = useState(dummyComplains); // 클라우드 (더미 데이터)
+  const [isAdding, setIsAdding] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [cards, setCards] = useState(dummyComplains);
 
   if (!isOpen) return null;
 
@@ -69,48 +56,51 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
     );
   };
 
-  // 포스트잇 작성창 열기/닫기 toggle
-  const handleToggle = () => {
-    setIsAdding((prev) => !prev);
-  };
-
+  const handleToggle = () => setIsAdding((prev) => !prev);
   const handleSubmit = (text) => {
     setPosts([text, ...posts]);
     setIsAdding(false);
   };
 
   const cardsWithSpans = calculateSpans(cards);
-  let columnStarts = { 1: 1, 2: 1, 3: 1 };
+
 
   return (
     <BoardContainer>
       <CloseButton onClick={onClose} aria-label="Close">✕</CloseButton>
       <h2>{buildingName}</h2>
 
+      {/* flex 기반 레이아웃으로 수정 */}
       <GridContainer>
-        {cardsWithSpans.map((card, index) => {
-          const gridColumn = `${columnStarts[card.row]} / span ${card.span}`;
-          columnStarts[card.row] += card.span;
-          const safeColor = CARD_COLORS[index % CARD_COLORS.length] || "#ffffff";
+        {[1, 2, 3].map((row) => (
+          <GridRow key={row}>
+            {cardsWithSpans
+              .filter((card) => card.row === row)
+              .map((card, idx) => {
+                const safeColor = ROW_COLORS[row][idx] || "#ffffff";
+                const widthPercent = (card.span / 12) * 100;
 
-          return (
-            <GridItem
-              key={index}
-              style={{
-                gridColumn,
-                gridRow: `${card.row}`,
-              }}
-            >
-              <ComplainCard
-                content={card.content}
-                likes={card.likes}
-                onLike={() => handleLike(card.id)}
-                color={safeColor}
-              />
-            </GridItem>
-          );
-        })}
+                return (
+                  <GridItem
+                    key={card.id}
+                    style={{
+                      width: `${widthPercent}%`,
+                      height: "100%",
+                    }}
+                  >
+                    <ComplainCard
+                      content={card.content}
+                      likes={card.likes}
+                      onLike={() => handleLike(card.id)}
+                      color={safeColor}
+                    />
+                  </GridItem>
+                );
+              })}
+          </GridRow>
+        ))}
       </GridContainer>
+
 
       <RecentLine />
       <ComplainPostit posts={posts} />

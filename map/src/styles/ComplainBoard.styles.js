@@ -26,16 +26,23 @@ export const CloseButton = styled.button`
 `;
 
 export const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  display: flex;
+  flex-direction: column;
   height: 300px;
   gap: 10px;
 `;
 
+export const GridRow = styled.div`
+  display: flex;
+  gap: 10px;
+  height: calc((300px - 20px) / 3); /* 3줄, gap 2개(10px씩) */
+`;
+
+
 export const GridItem = styled.div`
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: width 0.3s ease;
+  display: flex;
 `;
 
 export const AddButtonContainer = styled.div`
