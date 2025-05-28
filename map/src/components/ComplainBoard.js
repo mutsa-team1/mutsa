@@ -6,7 +6,7 @@ import RecentLine from "./RecentLine";
 import ComplainPostit from "./ComplainPostIt";
 import { dummyComplains } from "../data/dummyComplains"; // 더미 데이터로 분리함 (INITIAL_ROWS 였던 것...)
 
-const CARD_COLORS = ["#f8c8c8", "#fff4b3", "#d0f0c0", "#fff4b3", "#d9ccf1", "#bfe3ff"];
+const CARD_COLORS = ["#F8BDBD", "#C5CAE9", "#DCEFBF", "#FFF59D", "#C3AEE5", "#A0D3FA"];
 
 /**
  * 카드 배열을 받아서 각 row에 공감수 비율로 span 계산
