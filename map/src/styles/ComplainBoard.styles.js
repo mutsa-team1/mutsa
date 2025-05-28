@@ -38,10 +38,10 @@ export const GridRow = styled.div`
   height: calc((300px - 20px) / 3); /* 3줄, gap 2개(10px씩) */
 `;
 
-
 export const GridItem = styled.div`
   overflow: hidden;
   transition: width 0.3s ease;
+  height: 100%;
   display: flex;
 `;
 
