@@ -5,6 +5,7 @@ import NewPostit from "./NewPostIt";
 import RecentLine from "./RecentLine";
 import ComplainPostit from "./ComplainPostIt";
 import { dummyComplains } from "../data/dummyComplains"; // 더미 데이터로 분리함 (INITIAL_ROWS 였던 것...)
+import { AddButtonContainer, BoardContainer, CloseButton, GridContainer, GridItem } from "../styles/ComplainBoard.styles";
 
 const CARD_COLORS = ["#F8BDBD", "#C5CAE9", "#DCEFBF", "#FFF59D", "#C3AEE5", "#A0D3FA"];
 
@@ -17,19 +18,19 @@ const CARD_COLORS = ["#F8BDBD", "#C5CAE9", "#DCEFBF", "#FFF59D", "#C3AEE5", "#A0
  */
 function calculateSpans(cards) {
   // likes 순으로 내림차순 정렬
-  const sorted = [...cards].sort((a, b) => b.likes - a.likes); 
+  const sorted = [...cards].sort((a, b) => b.likes - a.likes);
 
   // 순위대로 배치 
-  const order = [0, 5, 4, 2, 1, 3]; 
+  const order = [0, 5, 4, 2, 1, 3];
   const rows = { 1: [], 2: [], 3: [] };
 
   // 각 카드의 실제 위치 결정하기
   order.forEach((sortedIdx, placementIdx) => {
-    const card = sorted[sortedIdx]; 
-    if (!card) return; 
+    const card = sorted[sortedIdx];
+    if (!card) return;
 
     if (placementIdx === 0) rows[1].push(card); // 1열: 1등
-    else if (placementIdx >= 1 && placementIdx <=3) rows[2].push(card); // 2열: 6, 5, 3등
+    else if (placementIdx >= 1 && placementIdx <= 3) rows[2].push(card); // 2열: 6, 5, 3등
     else rows[3].push(card); // 3열: 2, 4등
   })
 
@@ -82,58 +83,22 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
   let columnStarts = { 1: 1, 2: 1, 3: 1 };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "600px",
-        height: "400px",
-        backgroundColor: "white",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-        borderRadius: "12px",
-        zIndex: 1000,
-        padding: "20px",
-        overflowY: "auto",
-      }}
-    >
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "12px",
-          background: "transparent",
-          border: "none",
-          fontSize: "20px",
-          cursor: "pointer",
-        }}
-        aria-label="Close"
-      >
-        ✕
-      </button>
+    <BoardContainer>
+      <CloseButton onClick={onClose} aria-label="Close">✕</CloseButton>
       <h2>{buildingName}</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(12, 1fr)",
-          gridTemplateRows: "repeat(3, 1fr)",
-          height: "300px",
-          gap: "10px",
-        }}
-      >
+
+      <GridContainer>
         {cardsWithSpans.map((card, index) => {
           const gridColumn = `${columnStarts[card.row]} / span ${card.span}`;
           columnStarts[card.row] += card.span;
           const safeColor = CARD_COLORS[index % CARD_COLORS.length] || "#ffffff";
+
           return (
-            <div
+            <GridItem
               key={index}
               style={{
                 gridColumn,
                 gridRow: `${card.row}`,
-                overflow: "hidden",
               }}
             >
               <ComplainCard
@@ -142,30 +107,23 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
                 onLike={() => handleLike(card.id)}
                 color={safeColor}
               />
-            </div>
+            </GridItem>
           );
         })}
-      </div>
+      </GridContainer>
+
       <RecentLine />
       <ComplainPostit posts={posts} />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "16px",
-          right: "16px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-        }}
-      >
+
+      <AddButtonContainer>
         {isAdding && (
           <div style={{ marginBottom: "12px" }}>
             <NewPostit onSubmit={handleSubmit} />
           </div>
         )}
         <AddButton onClick={handleToggle} isAdding={isAdding} />
-      </div>
-    </div>
+      </AddButtonContainer>
+    </BoardContainer>
   );
 }
 
