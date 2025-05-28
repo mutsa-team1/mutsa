@@ -16,14 +16,22 @@ const CARD_COLORS = ["#F8BDBD", "#C5CAE9", "#DCEFBF", "#FFF59D", "#C3AEE5", "#A0
  * @returns {Array} row, span이 계산된 카드 배열
  */
 function calculateSpans(cards) {
+  // likes 순으로 내림차순 정렬
+  const sorted = [...cards].sort((a, b) => b.likes - a.likes); 
+
+  // 순위대로 배치 
+  const order = [0, 5, 4, 2, 1, 3]; 
   const rows = { 1: [], 2: [], 3: [] };
 
-  // index 기반으로 row를 할당
-  cards.forEach((card, index) => {
-    if (index === 0) rows[1].push(card);  
-    else if (index >= 1 && index <= 3) rows[2].push(card);
-    else rows[3].push(card);
-  });
+  // 각 카드의 실제 위치 결정하기
+  order.forEach((sortedIdx, placementIdx) => {
+    const card = sorted[sortedIdx]; 
+    if (!card) return; 
+
+    if (placementIdx === 0) rows[1].push(card); // 1열: 1등
+    else if (placementIdx >= 1 && placementIdx <=3) rows[2].push(card); // 2열: 6, 5, 3등
+    else rows[3].push(card); // 3열: 2, 4등
+  })
 
   // 각 row에서 공감 수 비율로 span 계산
   const spans = [];
