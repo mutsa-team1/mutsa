@@ -1,3 +1,5 @@
+// 불만 클라우드 안 각각의 불만 카드 
+
 import React from "react";
 import PropTypes from "prop-types";
 import LikeButton from "./LikeButton";
@@ -9,7 +11,7 @@ function ComplainCard({ content, likes, onLike, color }) {
         border: "2px solid transparent",
         borderRadius: "8px",
         padding: "12px",
-        backgroundColor: color, // 여기 적용
+        backgroundColor: color, 
         width: "100%",
         height: "100%",
         boxSizing: "border-box",

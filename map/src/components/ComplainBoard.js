@@ -1,3 +1,5 @@
+// 지도 핀 눌렀을 때 뜨는 창
+
 import React, { useState, useMemo } from "react";
 import ComplainCard from "./ComplainCard";
 import AddButton from "./AddButton";
