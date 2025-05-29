@@ -29,7 +29,7 @@ function calculateSpans(cards) {
     return { ...card, span: Math.max(span, 1) };
   });
 }
-function ComplainBoard({ isOpen, buildingName,onClose }) {
+function ComplainBoard({ isOpen, buildingName, onClose }) {
   const [isAdding, setIsAdding] = useState(false);
   const [posts, setPosts] = useState([]);
   const [rows, setRows] = useState(INITIAL_ROWS);
