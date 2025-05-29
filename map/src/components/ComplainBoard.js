@@ -15,12 +15,12 @@ const INITIAL_ROWS = [
     { content: "에어컨 너무 추워요", likes: 10 },
     { content: "수업자료 없어!!", likes: 30 },
     { content: "교수님 너무해요", likes: 15 },
-  ],
+  ]
   [
     { content: "교수님 너무해요", likes: 50 },
     { content: "과제 너무 싫어", likes: 80 },
   ],
-];
+]; // 위에 형식에 맞게 배열들로 저장되는 상태변수(랭킹용)만들고 그 상태변수를 여기에 이식하면 될 듯 !!
 function calculateSpans(cards) {
   const totalLikes = cards.reduce((sum, card) => sum + card.likes, 0);
   return cards.map((card) => {
