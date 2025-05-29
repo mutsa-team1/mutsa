@@ -1,3 +1,5 @@
+// 공감 버튼 
+
 import React from "react";
 import PropTypes from "prop-types";
 

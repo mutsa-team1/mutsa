@@ -1,3 +1,6 @@
+// 새로운 postit 추가하는 버튼 
+// 클릭 시 포스트잇 뜸
+
 import React from "react";
 
 function AddButton({ onClick, isAdding }) {
