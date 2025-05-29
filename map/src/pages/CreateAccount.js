@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { Wrapper,Form,Input,Title } from "../components/auth-components";
-import { useState, useEffect } from "react";
+import { Wrapper,Form,Input,Title } from "../components/AuthComponents";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 

@@ -1,6 +1,4 @@
-// 지도 핀 눌렀을 때 뜨는 창
-
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import ComplainCard from "./ComplainCard";
 import AddButton from "./AddButton";
 import NewPostit from "./NewPostIt";
@@ -15,15 +13,16 @@ import {
   GridItem,
   GridRow,
 } from "../styles/ComplainBoard.styles";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
-// 카드 색상을 행(row)별로 정확히 지정
+
 const ROW_COLORS = {
   1: ["#F8BDBD"],
   2: ["#C5CAE9", "#DCEFBF", "#FFF59D"],
   3: ["#C3AEE5", "#A0D3FA"],
 };
 
-// 공감수 비율 기반으로 span 계산
 function calculateSpans(cards) {
   const sorted = [...cards].sort((a, b) => b.likes - a.likes);
   const order = [0, 5, 4, 2, 1, 3];
@@ -43,7 +42,7 @@ function calculateSpans(cards) {
     const totalLikes = rowCards.reduce((sum, c) => sum + c.likes, 0);
     rowCards.forEach((card) => {
       const ratio = card.likes / totalLikes;
-      const span = ratio * 12; // 소수점까지 유지
+      const span = ratio * 12;
       spans.push({ ...card, row: Number(row), span: Math.max(span, 1) });
     });
   });
@@ -53,11 +52,18 @@ function calculateSpans(cards) {
 
 function ComplainBoard({ isOpen, buildingName, onClose }) {
   const [isAdding, setIsAdding] = useState(false);
-  const [posts, setPosts] = useState([]);
   const [cards, setCards] = useState(dummyComplains);
 
-  // useMemo로 최적화: cards가 바뀔 때만 span 계산 (참고: useMemo는 컴포넌트 최상단에서 조건문 밖에 있어야 함)
+  useEffect(()=>{
+    if (!buildingName) return null;
+
+    const fetchData = async() => {
+      const cardsRef = collection(db, "locations", buildingName, "cards");
+      const cardsSnap = await getDocs(cardsRef);
+    }
+  })
   const cardsWithSpans = useMemo(() => calculateSpans(cards), [cards]);
+
 
   if (!isOpen) return null;
 
@@ -71,8 +77,8 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
 
   const handleToggle = () => setIsAdding((prev) => !prev);
 
-  const handleSubmit = (text) => {
-    setPosts([text, ...posts]);
+  const handleSubmit = (content) => {
+    setCards([{content:{content}, likes: 0}, ...cards]);
     setIsAdding(false);
   };
 
@@ -113,8 +119,9 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
       </GridContainer>
 
       <RecentLine />
-      <ComplainPostit posts={posts} />
-
+      <ComplainPostit 
+      cards={cards}
+       />
       <AddButtonContainer>
         {isAdding && (
           <div style={{ marginBottom: "12px" }}>

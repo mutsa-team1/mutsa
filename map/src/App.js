@@ -1,11 +1,10 @@
 import React,{useEffect} from "react";
 import MainMap from "./pages/MainMap";
-import Login from "./pages/login";
-import CreateAccount from "./pages/create-account";
-import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
-import styled from "styled-components";
+import Login from "./pages/Login";
+import CreateAccount from "./pages/CreateAccount";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { auth } from "./firebase";
-import { ProtectedRoute } from "./components/protected-route";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {

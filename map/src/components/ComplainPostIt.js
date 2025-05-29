@@ -2,7 +2,7 @@
 
 import React from "react";
 
-function ComplainPostit({ posts }) {
+function ComplainPostit({ cards }) {
   return (
     <div
       style={{
@@ -12,7 +12,7 @@ function ComplainPostit({ posts }) {
         marginTop: "8px",
       }}
     >
-      {posts.map((text, index) => (
+      {cards.map(({content, index}) => (
         <div
           key={index}
           style={{
@@ -34,7 +34,7 @@ function ComplainPostit({ posts }) {
             overflow: "hidden",
           }}
         >
-          {text}
+          {content}
           {/* 접힌 귀퉁이 효과 */}
           <div
             style={{
