@@ -1,3 +1,5 @@
+// 최신순 분리 라인
+
 import React from "react";
 
 function RecentLine() {
