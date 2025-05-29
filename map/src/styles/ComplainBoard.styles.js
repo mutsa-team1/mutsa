@@ -53,3 +53,10 @@ export const AddButtonContainer = styled.div`
   flex-direction: column;
   align-items: flex-end;
 `;
+
+export const PostItWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+`;
