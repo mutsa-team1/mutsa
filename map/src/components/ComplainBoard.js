@@ -1,150 +1,130 @@
-import React, { useState } from "react";
+// 지도 핀 눌렀을 때 뜨는 창
+
+import React, { useState, useMemo } from "react";
 import ComplainCard from "./ComplainCard";
 import AddButton from "./AddButton";
 import NewPostit from "./NewPostIt";
 import RecentLine from "./RecentLine";
 import ComplainPostit from "./ComplainPostIt";
-const CARD_COLORS = [
-  ["#f8c8c8"], // row 0 - 1개
-  ["#fff4b3", "#d0f0c0", "#fff4b3"], // row 1 - 3개
-  ["#d9ccf1", "#bfe3ff"], // row 2 - 2개
-];
-const INITIAL_ROWS = [
-  [{ content: "수업자료 없어!!", likes: 53 }],
-  [
-    { content: "에어컨 너무 추워요", likes: 10 },
-    { content: "수업자료 없어!!", likes: 30 },
-    { content: "교수님 너무해요", likes: 15 },
-  ],
-  [
-    { content: "교수님 너무해요", likes: 50 },
-    { content: "과제 너무 싫어", likes: 80 },
-  ],
-];
+import { dummyComplains } from "../data/dummyComplains";
+import {
+  AddButtonContainer,
+  BoardContainer,
+  CloseButton,
+  GridContainer,
+  GridItem,
+  GridRow,
+} from "../styles/ComplainBoard.styles";
+
+// 카드 색상을 행(row)별로 정확히 지정
+const ROW_COLORS = {
+  1: ["#F8BDBD"],
+  2: ["#C5CAE9", "#DCEFBF", "#FFF59D"],
+  3: ["#C3AEE5", "#A0D3FA"],
+};
+
+// 공감수 비율 기반으로 span 계산
 function calculateSpans(cards) {
-  const totalLikes = cards.reduce((sum, card) => sum + card.likes, 0);
-  return cards.map((card) => {
-    const ratio = card.likes / totalLikes;
-    const span = Math.round(ratio * 12);
-    return { ...card, span: Math.max(span, 1) };
+  const sorted = [...cards].sort((a, b) => b.likes - a.likes);
+  const order = [0, 5, 4, 2, 1, 3];
+  const rows = { 1: [], 2: [], 3: [] };
+
+  order.forEach((sortedIdx, placementIdx) => {
+    const card = sorted[sortedIdx];
+    if (!card) return;
+
+    if (placementIdx === 0) rows[1].push(card);
+    else if (placementIdx >= 1 && placementIdx <= 3) rows[2].push(card);
+    else rows[3].push(card);
   });
+
+  const spans = [];
+  Object.entries(rows).forEach(([row, rowCards]) => {
+    const totalLikes = rowCards.reduce((sum, c) => sum + c.likes, 0);
+    rowCards.forEach((card) => {
+      const ratio = card.likes / totalLikes;
+      const span = ratio * 12; // 소수점까지 유지
+      spans.push({ ...card, row: Number(row), span: Math.max(span, 1) });
+    });
+  });
+
+  return spans;
 }
-function ComplainBoard({ isOpen, buildingName,onClose }) {
+
+function ComplainBoard({ isOpen, buildingName, onClose }) {
   const [isAdding, setIsAdding] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [rows, setRows] = useState(INITIAL_ROWS);
+  const [cards, setCards] = useState(dummyComplains);
+
+  // useMemo로 최적화: cards가 바뀔 때만 span 계산 (참고: useMemo는 컴포넌트 최상단에서 조건문 밖에 있어야 함)
+  const cardsWithSpans = useMemo(() => calculateSpans(cards), [cards]);
+
   if (!isOpen) return null;
-  const handleLike = (rowIndex, cardIndex) => {
-    setRows((prevRows) =>
-      prevRows.map((row, rIdx) =>
-        row.map((card, cIdx) =>
-          rIdx === rowIndex && cIdx === cardIndex
-            ? { ...card, likes: card.likes + 1 }
-            : card
-        )
+
+  const handleLike = (id) => {
+    setCards((prev) =>
+      prev.map((card) =>
+        card.id === id ? { ...card, likes: card.likes + 1 } : card
       )
     );
   };
-  const handleToggle = () => {
-    setIsAdding((prev) => !prev);
-  };
+
+  const handleToggle = () => setIsAdding((prev) => !prev);
+
   const handleSubmit = (text) => {
     setPosts([text, ...posts]);
     setIsAdding(false);
   };
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "600px",
-        height: "400px",
-        backgroundColor: "white",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-        borderRadius: "12px",
-        zIndex: 1000,
-        padding: "20px",
-        overflowY: "auto",
-        }}
-    >
-        {/* 닫기 버튼 추가 */}
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "12px",
-          background: "transparent",
-          border: "none",
-          fontSize: "20px",
-          cursor: "pointer",
-        }}
-        aria-label="Close"
-      >
-        ✕
-      </button>
-      <h2>{buildingName}</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(12, 1fr)",
-          gridTemplateRows: "repeat(3, 1fr)",
-          height: "300px",
-          gap: "10px",
-        }}
-      >
-        {rows.map((row, rowIndex) => {
-          const rowCards = calculateSpans(row);
-          let columnStart = 1;
 
-          return rowCards.map((card, cardIndex) => {
-            const gridColumn = `${columnStart} / span ${card.span}`;
-            columnStart += card.span;
-            const safeColor =
-            (CARD_COLORS[rowIndex] && CARD_COLORS[rowIndex][cardIndex]) ||
-            "#ffffff";
-            return (
-              <div
-                key={`${rowIndex}-${cardIndex}`}
-                style={{
-                  gridColumn,
-                  gridRow: `${rowIndex + 1}`,
-                  overflow: "hidden",
-                }}
-              >
-                <ComplainCard
-                  content={card.content}
-                  likes={card.likes}
-                  onLike={() => handleLike(rowIndex, cardIndex)}
-                  color={safeColor}
-                />
-              </div>
-            );
-          });
-        })}
-      </div>
-      <RecentLine /> {/*최신순 라인*/}
+  return (
+    <BoardContainer>
+      <CloseButton onClick={onClose} aria-label="Close">
+        ✕
+      </CloseButton>
+      <h2>{buildingName}</h2>
+
+      <GridContainer>
+        {[1, 2, 3].map((row) => (
+          <GridRow key={row}>
+            {cardsWithSpans
+              .filter((card) => card.row === row)
+              .map((card, idx) => {
+                const safeColor = ROW_COLORS[row][idx] || "#ffffff";
+                const widthPercent = ((card.span / 12) * 100).toFixed(1);
+
+                return (
+                  <GridItem
+                    key={card.id}
+                    style={{
+                      width: `${widthPercent}%`,
+                    }}
+                  >
+                    <ComplainCard
+                      content={card.content}
+                      likes={card.likes}
+                      onLike={() => handleLike(card.id)}
+                      color={safeColor}
+                    />
+                  </GridItem>
+                );
+              })}
+          </GridRow>
+        ))}
+      </GridContainer>
+
+      <RecentLine />
       <ComplainPostit posts={posts} />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "16px",
-          right: "16px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-        }}
-      >
+
+      <AddButtonContainer>
         {isAdding && (
           <div style={{ marginBottom: "12px" }}>
             <NewPostit onSubmit={handleSubmit} />
           </div>
         )}
         <AddButton onClick={handleToggle} isAdding={isAdding} />
-      </div>
-    </div>
+      </AddButtonContainer>
+    </BoardContainer>
   );
 }
+
 export default ComplainBoard;
