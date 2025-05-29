@@ -12,6 +12,7 @@ import {
   GridContainer,
   GridItem,
   GridRow,
+  PostItWrapper,
 } from "../styles/ComplainBoard.styles";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
@@ -73,12 +74,11 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
         card.id === id ? { ...card, likes: card.likes + 1 } : card
       )
     );
+    console.log(id);
   };
 
-  const handleToggle = () => setIsAdding((prev) => !prev);
-
-  const handleSubmit = (content) => {
-    setCards([{content:{content}, likes: 0}, ...cards]);
+  const handleSubmit = (text) => {
+    setCards([{id: Date.now(), content:text, likes: 0}, ...cards]);
     setIsAdding(false);
   };
 
@@ -119,16 +119,23 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
       </GridContainer>
 
       <RecentLine />
-      <ComplainPostit 
-      cards={cards}
-       />
+      <PostItWrapper>
+        {cards.map((card) => (
+          <ComplainPostit 
+            content={card.content}
+            likes={card.likes}
+            onLike={() => handleLike(card.id)} 
+          />
+        ))}
+      </PostItWrapper>
+
       <AddButtonContainer>
         {isAdding && (
           <div style={{ marginBottom: "12px" }}>
             <NewPostit onSubmit={handleSubmit} />
           </div>
         )}
-        <AddButton onClick={handleToggle} isAdding={isAdding} />
+        <AddButton onClick={()=>{setIsAdding((prev)=>!prev)}} isAdding={isAdding} />
       </AddButtonContainer>
     </BoardContainer>
   );

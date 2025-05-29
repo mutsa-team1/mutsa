@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Wrapper,Form,Input,Title } from "../components/AuthComponents";
+import { Wrapper,Form,Input,Title, Switcher } from "../components/AuthComponents";
 import {React, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 
 const Login = () => {
@@ -32,6 +32,9 @@ const Login = () => {
                 <Input type="password" name="password" value={password} onChange={onChange} placeholder="비밀번호를 입력해주세요" required />
                 <Input type="submit" value="확인" />
             </Form>
+            <Switcher>
+                Don't have an account? <Link to="/create-account">Create One &rarr;</Link>
+            </Switcher>
         </Wrapper>
     );
 }
