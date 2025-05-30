@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  gap: 30px;
+  gap: 20px;
 `;
 export const Background = styled.div`
   position: fixed;
@@ -21,11 +21,14 @@ export const Background = styled.div`
   z-index: -1;
 `;
 export const PageTitle = styled.h1`
-  font-size: 36px;
-  font-weight: 800;
+  font-size: 38px;
+  font-weight: 750;
   margin-bottom: 30px;
-  margin-top: -100px;
+  margin-top: -80px;
   color: #222;
+`;
+export const Highlight = styled.span`
+  color: #3182f6; /* 파란색 */
 `;
 export const LoginCard = styled.div`
   width: 300px;

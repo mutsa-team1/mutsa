@@ -1,5 +1,3 @@
-// 새로운 불만 게시글 추가할 때 뜨는 포스트잇(입력창)
-
 import React from "react";
 import LikeButton from "./LikeButton";
 
@@ -7,51 +5,48 @@ function ComplainPostit({ content, likes, onLike }) {
   return (
     <div
       style={{
+        filter: "drop-shadow(0 0 12px rgba(0, 0, 0, 0.08))",
         position: "relative",
-        width: "140px",
-        height: "100px",
-        backgroundColor: "rgba(0, 0, 0, 0.05)",
-        border: "2px",
-        borderRadius: "2px",
-        padding: "10px",
-        fontSize: "13px",
-        color: "black",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        boxShadow: "2px 4px 6px rgba(0, 0, 0, 0.1)",
-        boxSizing: "border-box",
-        overflow: "hidden",
+        width: "160px",
+        height: "120px",
       }}
     >
-      {content}
-      {/* 접힌 귀퉁이 효과 */}
       <div
         style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: 0,
-          height: 0,
-          borderLeft: "16px solid transparent",
-          borderTop: "16px solid rgba(0,0,0,0.05)",
-          zIndex: 1,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.05)",
+          position: "relative",
+          clipPath: "polygon(0 0, 100% 0, 100% 100%, 12% 100%, 0% 88%)",
+          borderRadius: "4px",
+          boxSizing: "border-box",
+          padding: "12px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          fontSize: "14px",
+          fontWeight: 500,
+          color: "#333",
         }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: "28px",
-          height: "28px",
-          background: "transparent",
-          clipPath: "polygon(0 100%, 100% 0, 100% 100%)",
-          zIndex: 1,
-        }}
-      />
-      <LikeButton likes={likes} onClick={onLike} />
+      >
+        <div style={{ wordBreak: "keep-all", zIndex: 2 }}>{content}</div>
+
+        <div style={{ display: "flex", justifyContent: "flex-end", zIndex: 2 }}>
+          <LikeButton likes={likes} onClick={onLike} />
+        </div>
+
+        {/* 접힌 귀 ::before 대체 */}
+        <div
+          style={{
+            position: "absolute",
+            left: 2,
+            bottom: -5,
+            width: "12%",
+            aspectRatio: "1 / 1",
+            background: "linear-gradient(220deg, #e0e0e0 50%, transparent 50%)",
+          }}
+        />
+      </div>
     </div>
   );
 }
