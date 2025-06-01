@@ -4,9 +4,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import LikeButton from "./LikeButton";
 
-function ComplainCard({ content, likes, onLike, color }) {
+function ComplainCard({ key, content, likes, onLike, color }) {
   return (
     <div
+      key={key}
       style={{
         border: "2px solid transparent",
         borderRadius: "8px",
