@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import SubmitButton from "./SubmitButton";
+// import SubmitButton from "./SubmitButton";
 import {
   Container,
   Textarea,
   ButtonWrap,
   Corner,
+  StyledSubmitButton,
 } from "../styles/NewPostit.styles";
 
 function NewPostit({ onSubmit }) {
@@ -19,11 +20,9 @@ function NewPostit({ onSubmit }) {
       />
       <Corner />
       <ButtonWrap>
-        <SubmitButton
-          onClick={() => {
-            if (text.trim()) onSubmit(text);
-          }}
-        />
+        <StyledSubmitButton onClick={() => {
+          if (text.trim()) onSubmit(text);
+        }}>등록</StyledSubmitButton>
       </ButtonWrap>
     </Container>
   );

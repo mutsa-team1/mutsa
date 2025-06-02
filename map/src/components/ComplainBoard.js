@@ -154,7 +154,6 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
           </GridRow>
         ))}
       </GridContainer>
-
       <RecentLine />
       <PostItWrapper>
         {cards.map((card) => (
@@ -166,7 +165,6 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
           />
         ))}
       </PostItWrapper>
-
       <AddButtonContainer>
         {isAdding && (
           <div style={{ marginBottom: "12px" }}>
