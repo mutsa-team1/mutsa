@@ -81,7 +81,7 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
       createdAt: createdAt,
       content: text,
       likes: 0,
-      likedBy: [user.uid,]
+      likedBy: []
     };
     setCards([newCard, ...cards]);
     setIsAdding(false);

@@ -1,6 +1,6 @@
 import React,{useEffect} from "react";
 import MainMap from "./pages/MainMap";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import CreateAccount from "./pages/CreateAccount";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { auth } from "./firebase";
