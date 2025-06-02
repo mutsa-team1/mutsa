@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <ProtectedRoute childeren={<MainMap/>} />
   },
   {
-    path: "/login",
+    path: "/Login",
     element: <Login />
   },
   {

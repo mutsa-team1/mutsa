@@ -1,15 +1,5 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import {
-  Wrapper,
-  LoginCard,
-  Form,
-  Input,
-  Title,
-  Button,
-  Switcher,
-  Error,
-  PageTitle,
-  Background,
+import {Wrapper,LoginCard,Form,Input,Title,Button,Switcher,Error,PageTitle,Background,Highlight,
 } from "../components/AuthComponents";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -47,7 +37,7 @@ const Login = () => {
   return (
     <Wrapper>
         <Background />
-      <PageTitle>SKKU Complaint Map</PageTitle>
+      <PageTitle>SKKU <Highlight>Complaint Map</Highlight></PageTitle>
       <LoginCard>
         <Title>로그인</Title>
         <Form onSubmit={onSubmit}>

@@ -5,37 +5,50 @@ function NewPostit({ onSubmit }) {
   const [text, setText] = useState("");
 
   return (
-    <div style={styles.container}>
-      <textarea
-        placeholder="내용을 입력하세요..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        style={styles.textarea}
-      />
-      <div style={styles.corner} />
-      <div style={styles.transparentCorner} />
-      <div style={styles.buttonWrap}>
-        <SubmitButton
-          onClick={() => {
-            if (text.trim()) onSubmit(text);
-          }}
+    <div style={styles.wrapper}>
+      <div style={styles.card}>
+        <textarea
+          placeholder="내용을 입력하세요..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          style={styles.textarea}
         />
+        <div style={styles.buttonWrap}>
+          <SubmitButton
+            onClick={() => {
+              if (text.trim()) onSubmit(text);
+            }}
+          />
+        </div>
+        {/* 접힌 귀 */}
+        <div style={styles.foldedCorner} />
       </div>
     </div>
   );
 }
 
 const styles = {
-  container: {
+  wrapper: {
+    filter: "drop-shadow(0 0 12px rgba(0, 0, 0, 0.08))",
+    position: "relative",
     width: "240px",
     height: "230px",
+  },
+  card: {
+    width: "100%",
+    height: "100%",
     backgroundColor: "#edf7f5",
-    borderRadius: "2px",
-    padding: "12px",
-    boxShadow: "4px 8px 8px 0px #00000040",
     position: "relative",
-    border: "2px",
+    clipPath: "polygon(0 0, 100% 0, 100% 100%, 12% 100%, 0% 88%)",
+    borderRadius: "4px",
     boxSizing: "border-box",
+    padding: "12px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    fontSize: "14px",
+    fontWeight: 500,
+    color: "#333",
   },
   textarea: {
     width: "100%",
@@ -52,15 +65,16 @@ const styles = {
     display: "flex",
     justifyContent: "flex-end",
     marginTop: "8px",
+    zIndex: 2,
   },
-  corner: {
+  foldedCorner: {
     position: "absolute",
-    bottom: 0,
-    left: 0,
-    width: "0",
-    height: "0",
-    borderLeft: "24px solid transparent",
-    borderTop: "24px solid rgba(0,0,0,0.1)",
+    left: 2,
+    bottom: -5,
+    width: "12%",
+    aspectRatio: "1 / 1",
+    background: "linear-gradient(220deg, #e0e0e0 50%, transparent 50%)",
+    zIndex: 1,
   },
 };
 
