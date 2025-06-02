@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <Wrapper>
         <Background />
-      <PageTitle>SKKU Complaint Map</PageTitle>
+      <PageTitle>SKKU <Highlight>Complaint Map</Highlight></PageTitle>
       <LoginCard>
         <Title>로그인</Title>
         <Form onSubmit={onSubmit}>

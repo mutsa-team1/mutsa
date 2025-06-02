@@ -29,3 +29,4 @@ function NewPostit({ onSubmit }) {
 }
 
 export default NewPostit;
+

@@ -1,5 +1,3 @@
-// 새로운 불만 게시글 추가할 때 뜨는 포스트잇(입력창)
-
 import React from "react";
 import {
   PostitContainer,
@@ -21,3 +19,4 @@ function ComplainPostit({ content, likes, onLike }) {
 }
 
 export default ComplainPostit;
+
