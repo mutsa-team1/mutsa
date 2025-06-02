@@ -1,6 +1,9 @@
 import React from 'react';
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import ComplainBoard from "../components/ComplainBoard";
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const MainMap = () => {
   const locations = [
@@ -23,14 +26,39 @@ const MainMap = () => {
   ];
 
   const [selected, setSelected] = React.useState(null);
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    signOut(auth);
+    navigate("/login");
+  };
 
   return (
     <div style={{ width: "100%", height: "900px" }}>
+      <button
+        onClick={handleSignOut}
+        style={{
+          position: "fixed",
+          top: "16px",
+          right: "16px",
+          padding: "10px 14px",
+          backgroundColor: "#ef5350",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+          zIndex: 9999,
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          fontWeight: "bold",
+          fontSize: "16px"
+        }}
+      >
+         →Sign Out
+      </button>
       <Map
         center={{ lat: 37.5880, lng: 126.9930 }}
         style={{ width: "100%", height: "100%" }}
         level={2}
-        // draggable={false}
       >
         {locations.map((loc, index) => (
           <React.Fragment key={index}>

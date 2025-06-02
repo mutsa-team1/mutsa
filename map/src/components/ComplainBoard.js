@@ -13,7 +13,7 @@ import {
   GridRow,
   PostItWrapper,
 } from "../styles/ComplainBoard.styles";
-import { collection, doc, getDocs, increment, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 
