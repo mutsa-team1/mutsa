@@ -54,19 +54,19 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
   const [isAdding, setIsAdding] = useState(false);
   const [cards, setCards] = useState([]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const ref = collection(db, buildingName);
-        const res = await getDocs(ref);
-        setCards(res.docs.map((doc)=>{
-          return {
-            id: doc.id,
-            ...doc.data()
-          };
-        }))
-      }
-      fetchData();
-    }, [buildingName]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const ref = collection(db, buildingName);
+      const res = await getDocs(ref);
+      setCards(res.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data()
+        };
+      }))
+    }
+    fetchData();
+  }, [buildingName]);
 
   const cardsWithSpans = useMemo(() => calculateSpans(cards), [cards]);
 
@@ -88,7 +88,7 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
     const ref = doc(db, buildingName, String(createdAt));
     await setDoc(ref, newCard);
   };
-  
+
   const handleLike = async (createdAt) => {
     const user = auth.currentUser;
     let didLike = false;
@@ -105,7 +105,7 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
       return card;
     });
 
-    if(didLike) {
+    if (didLike) {
       setCards(updatedCards);
 
       const ref = doc(db, buildingName, String(createdAt));
@@ -119,61 +119,64 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
 
 
   return (
-    <BoardContainer>
-      <CloseButton onClick={onClose} aria-label="Close">
-        ✕
-      </CloseButton>
-      <h2>{buildingName}</h2>
+    <>
+      <BoardContainer>
+        <CloseButton onClick={onClose} aria-label="Close">
+          ✕
+        </CloseButton>
+        <h2>{buildingName}</h2>
 
-      <GridContainer>
-        {[1, 2, 3].map((row) => (
-          <GridRow key={row}>
-            {cardsWithSpans
-              .filter((card) => card.row === row)
-              .map((card, idx) => {
-                const safeColor = ROW_COLORS[row][idx] || "#ffffff";
-                const widthPercent = ((card.span / 12) * 100).toFixed(1);
+        <GridContainer>
+          {[1, 2, 3].map((row) => (
+            <GridRow key={row}>
+              {cardsWithSpans
+                .filter((card) => card.row === row)
+                .map((card, idx) => {
+                  const safeColor = ROW_COLORS[row][idx] || "#ffffff";
+                  const widthPercent = ((card.span / 12) * 100).toFixed(1);
 
-                return (
-                  <GridItem
-                    key={card.id}
-                    style={{
-                      width: `${widthPercent}%`,
-                    }}
-                  >
-                    <ComplainCard
-                      key={card.createdAt}
-                      content={card.content}
-                      likes={card.likes}
-                      onLike={() => handleLike(card.createdAt)}
-                      color={safeColor}
-                    />
-                  </GridItem>
-                );
-              })}
-          </GridRow>
-        ))}
-      </GridContainer>
-      <RecentLine />
-      <PostItWrapper>
-        {cards.map((card) => (
-          <ComplainPostit 
-            key={card.createdAt}
-            content={card.content}
-            likes={card.likes}
-            onLike={() => handleLike(card.createdAt)} 
-          />
-        ))}
-      </PostItWrapper>
+                  return (
+                    <GridItem
+                      key={card.id}
+                      style={{
+                        width: `${widthPercent}%`,
+                      }}
+                    >
+                      <ComplainCard
+                        key={card.createdAt}
+                        content={card.content}
+                        likes={card.likes}
+                        onLike={() => handleLike(card.createdAt)}
+                        color={safeColor}
+                      />
+                    </GridItem>
+                  );
+                })}
+            </GridRow>
+          ))}
+        </GridContainer>
+        <RecentLine />
+        <PostItWrapper>
+          {cards.map((card) => (
+            <ComplainPostit
+              key={card.createdAt}
+              content={card.content}
+              likes={card.likes}
+              onLike={() => handleLike(card.createdAt)}
+            />
+          ))}
+        </PostItWrapper>
+      </BoardContainer>
+
       <AddButtonContainer>
         {isAdding && (
           <div style={{ marginBottom: "12px" }}>
             <NewPostit onSubmit={handleSubmit} />
           </div>
         )}
-        <AddButton onClick={()=>{setIsAdding((prev)=>!prev)}} isAdding={isAdding} />
+        <AddButton onClick={() => { setIsAdding((prev) => !prev) }} isAdding={isAdding} />
       </AddButtonContainer>
-    </BoardContainer>
+    </>
   );
 }
 

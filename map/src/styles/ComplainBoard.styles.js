@@ -46,12 +46,15 @@ export const GridItem = styled.div`
 `;
 
 export const AddButtonContainer = styled.div`
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
+  position: fixed;
+  bottom: calc(50% - 200px + 16px); /* BoardContainer의 top 위치 + bottom 여백 */
+  right: calc(50% - 300px + 16px); /* BoardContainer의 left 위치 + right 여백 */
+  // bottom: 16px;
+  // right: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  z-index: 1000;
 `;
 
 export const PostItWrapper = styled.div`
@@ -73,7 +76,6 @@ export const StyledAddButton = styled.button`
   cursor: pointer;
   transition: background-color 0.2s ease;
 `;
-
 
 export const PostitContainer = styled.div`
   position: relative;
