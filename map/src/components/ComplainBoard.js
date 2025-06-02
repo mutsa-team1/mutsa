@@ -4,7 +4,6 @@ import AddButton from "./AddButton";
 import NewPostit from "./NewPostIt";
 import RecentLine from "./RecentLine";
 import ComplainPostit from "./ComplainPostIt";
-import { dummyComplains } from "../data/dummyComplains";
 import {
   AddButtonContainer,
   BoardContainer,
@@ -14,8 +13,8 @@ import {
   GridRow,
   PostItWrapper,
 } from "../styles/ComplainBoard.styles";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { collection, doc, getDocs, increment, setDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 
 const ROW_COLORS = {
@@ -53,34 +52,71 @@ function calculateSpans(cards) {
 
 function ComplainBoard({ isOpen, buildingName, onClose }) {
   const [isAdding, setIsAdding] = useState(false);
-  const [cards, setCards] = useState(dummyComplains);
+  const [cards, setCards] = useState([]);
 
-  useEffect(()=>{
-    if (!buildingName) return null;
+    useEffect(() => {
+      const fetchData = async () => {
+        const ref = collection(db, buildingName);
+        const res = await getDocs(ref);
+        setCards(res.docs.map((doc)=>{
+          return {
+            id: doc.id,
+            ...doc.data()
+          };
+        }))
+      }
+      fetchData();
+    }, [buildingName]);
 
-    const fetchData = async() => {
-      const cardsRef = collection(db, "locations", buildingName, "cards");
-      const cardsSnap = await getDocs(cardsRef);
-    }
-  })
   const cardsWithSpans = useMemo(() => calculateSpans(cards), [cards]);
 
 
   if (!isOpen) return null;
 
-  const handleLike = (id) => {
-    setCards((prev) =>
-      prev.map((card) =>
-        card.id === id ? { ...card, likes: card.likes + 1 } : card
-      )
-    );
-    console.log(id);
+  const handleSubmit = async (text) => {
+    const user = auth.currentUser;
+    const createdAt = Date.now();
+    const newCard = {
+      user: user.uid,
+      createdAt: createdAt,
+      content: text,
+      likes: 0,
+      likedBy: []
+    };
+    setCards([newCard, ...cards]);
+    setIsAdding(false);
+    const ref = doc(db, buildingName, String(createdAt));
+    await setDoc(ref, newCard);
+  };
+  
+  const handleLike = async (createdAt) => {
+    const user = auth.currentUser;
+    let didLike = false;
+
+    const updatedCards = cards.map((card) => {
+      if (card.createdAt === createdAt && !card.likedBy.includes(user.uid)) {
+        didLike = true;
+        return {
+          ...card,
+          likes: card.likes + 1,
+          likedBy: [user.uid, ...card.likedBy],
+        };
+      }
+      return card;
+    });
+
+    if(didLike) {
+      setCards(updatedCards);
+
+      const ref = doc(db, buildingName, String(createdAt));
+      await updateDoc(ref, {
+        likes: (cards.find(c => c.createdAt === createdAt)?.likes || 0) + 1,
+        likedBy: [user.uid, ...(cards.find(card => card.createdAt === createdAt)?.likedBy || [])],
+      });
+    }
   };
 
-  const handleSubmit = (text) => {
-    setCards([{id: Date.now(), content:text, likes: 0}, ...cards]);
-    setIsAdding(false);
-  };
+
 
   return (
     <BoardContainer>
@@ -106,9 +142,10 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
                     }}
                   >
                     <ComplainCard
+                      key={card.createdAt}
                       content={card.content}
                       likes={card.likes}
-                      onLike={() => handleLike(card.id)}
+                      onLike={() => handleLike(card.createdAt)}
                       color={safeColor}
                     />
                   </GridItem>
@@ -122,9 +159,10 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
       <PostItWrapper>
         {cards.map((card) => (
           <ComplainPostit 
+            key={card.createdAt}
             content={card.content}
             likes={card.likes}
-            onLike={() => handleLike(card.id)} 
+            onLike={() => handleLike(card.createdAt)} 
           />
         ))}
       </PostItWrapper>

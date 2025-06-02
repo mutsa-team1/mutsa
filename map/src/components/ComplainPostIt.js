@@ -3,9 +3,10 @@
 import React from "react";
 import LikeButton from "./LikeButton";
 
-function ComplainPostit({ content, likes, onLike }) {
+function ComplainPostit({ key, content, likes, onLike }) {
   return (
     <div
+      key={key}
       style={{
         position: "relative",
         width: "140px",
