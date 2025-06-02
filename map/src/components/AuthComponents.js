@@ -1,55 +1,95 @@
-import {styled} from "styled-components";
+import { styled } from "styled-components";
 
 export const Wrapper = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px 0px;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 30px;
+`;
+export const Background = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image: url("/bg-skku-map.png");
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px);
+  z-index: -1;
+`;
+export const PageTitle = styled.h1`
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  margin-top: -100px;
+  color: #222;
+`;
+export const LoginCard = styled.div`
+  width: 300px;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const Title = styled.h1`
-    font-size: 42px;
+  font-size: 28px;
+  margin-bottom: 30px;
 `;
 
 export const Form = styled.form`
-    margin-top: 50px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 `;
 
 export const Input = styled.input`
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: none;
-    font-size: 50px;
-    &[type="input"]{
-        cursor:pointer;
-    }
-    &:hover{
-        opacity: 0.8;
-    }
-    &::placeholder{
-        align-content: center;
-    }
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  &:focus {
+    border-color: #1a73e8;
+    outline: none;
+  }
+`;
+
+export const Button = styled.button`
+  background-color: #1a73e8;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #1664c1;
+  }
 `;
 
 export const Error = styled.span`
-    font-weight: 600;
-    color: tomato;
+  font-weight: 600;
+  color: tomato;
+  margin-top: 10px;
 `;
 
 export const Switcher = styled.span`
-    margin-top: 20px;
-    a{
-        color: blue;
-    }
+  margin-top: 20px;
+  font-size: 14px;
+  a {
+    color: #1a73e8;
+    text-decoration: none;
+    margin-left: 4px;
+    font-weight: bold;
+  }
 `;
