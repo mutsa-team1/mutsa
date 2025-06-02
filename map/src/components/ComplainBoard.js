@@ -3,18 +3,23 @@ import ComplainCard from "./ComplainCard";
 import AddButton from "./AddButton";
 import NewPostit from "./NewPostIt";
 import RecentLine from "./RecentLine";
-import ComplainPostit from "./ComplainPostIt";
 import {
   AddButtonContainer,
   BoardContainer,
+  ButtonWrap,
+  Card,
   CloseButton,
+  Content,
+  FoldedCorner,
   GridContainer,
   GridItem,
   GridRow,
   PostItWrapper,
+  Wrapper,
 } from "../styles/ComplainBoard.styles";
 import { collection, doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { StyledLikeButton } from "../styles/ComplainCard.styles";
 
 
 const ROW_COLORS = {
@@ -158,12 +163,17 @@ function ComplainBoard({ isOpen, buildingName, onClose }) {
         <RecentLine />
         <PostItWrapper>
           {cards.map((card) => (
-            <ComplainPostit
-              key={card.createdAt}
-              content={card.content}
-              likes={card.likes}
-              onLike={() => handleLike(card.createdAt)}
-            />
+            <Wrapper key={card.createdAt}>
+              <Card>
+                <Content>{card.content}</Content>
+                <ButtonWrap>
+                  <StyledLikeButton onClick={() => handleLike(card.createdAt)}>
+                    👍 {card.likes}
+                  </StyledLikeButton>
+                </ButtonWrap>
+                <FoldedCorner />
+              </Card>
+            </Wrapper>
           ))}
         </PostItWrapper>
       </BoardContainer>

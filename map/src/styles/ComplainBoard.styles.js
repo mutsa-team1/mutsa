@@ -77,47 +77,6 @@ export const StyledAddButton = styled.button`
   transition: background-color 0.2s ease;
 `;
 
-export const PostitContainer = styled.div`
-  position: relative;
-  width: 140px;
-  height: 100px;
-  background-color: rgba(0, 0, 0, 0.05);
-  border: 2px;
-  border-radius: 2px;
-  padding: 10px;
-  font-size: 13px;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  overflow: hidden;
-`;
-
-export const FoldedCorner1 = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 16px solid transparent;
-  border-top: 16px solid rgba(0, 0, 0, 0.05);
-  z-index: 1;
-`;
-
-export const FoldedCorner2 = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 28px;
-  height: 28px;
-  background: transparent;
-  clip-path: polygon(0 100%, 100% 0, 100% 100%);
-  z-index: 1;
-`;
-
 export const Container = styled.div`
   display: flex;
   align-items: center;
@@ -140,4 +99,50 @@ export const Line = styled.div`
   height: 1px;
   background-color: #ddd;
   margin-left: 8px;
+`;
+
+export const Wrapper = styled.div`
+  filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.08));
+  position: relative;
+  flex: 0 0 140px; /* 고정 너비 140px */
+  height: 120px;
+  box-sizing: border-box;
+`;
+
+export const Card = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.05);
+  position: relative;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 12% 100%, 0% 88%);
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+`;
+
+export const Content = styled.div`
+  word-break: keep-all;
+  z-index: 2;
+`;
+
+export const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2;
+`;
+
+export const FoldedCorner = styled.div`
+  position: absolute;
+  left: 2px;
+  bottom: -5px;
+  width: 12%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(220deg, #e0e0e0 50%, transparent 50%);
+  z-index: 1;
 `;
