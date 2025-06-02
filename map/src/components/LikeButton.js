@@ -2,25 +2,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import { StyledLikeButton } from "../styles/ComplainCard.styles";
 
 function LikeButton({ likes, onClick }) {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        border: "none",
-        background: "transparent",
-        color: "#888",
-        fontWeight: "bold",
-        cursor: "pointer",
-        textAlign: "right",
-        marginTop: "8px",
-        alignSelf: "flex-end",
-        fontSize: "16px",
-      }}
-    >
+    <StyledLikeButton onClick={onClick}>
       👍 {likes}
-    </button>
+    </StyledLikeButton>
   );
 }
 

@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {Wrapper,LoginCard,Form,Input,Title,Button,Switcher,Error,PageTitle, Background
-} from "../components/AuthComponents";
+} from "../styles/AuthComponents.styles";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";

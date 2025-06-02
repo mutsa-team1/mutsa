@@ -30,7 +30,7 @@ const MainMap = () => {
         center={{ lat: 37.5880, lng: 126.9930 }}
         style={{ width: "100%", height: "100%" }}
         level={2}
-        draggable={false}
+        // draggable={false}
       >
         {locations.map((loc, index) => (
           <React.Fragment key={index}>

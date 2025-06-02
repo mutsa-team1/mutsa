@@ -1,23 +1,10 @@
 // NewPostIt 안 등록 버튼
 
 import React from "react";
+import { StyledSubmitButton } from "../styles/NewPostit.styles";
+
 function SubmitButton({ onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        fontSize: "13px",
-        backgroundColor: "#ffffff",
-        color: "#000000",
-        border: "1px solid #ccc",
-        borderRadius: "6px",
-        padding: "4px 12px",
-        cursor: "pointer",
-        marginTop: "25px",
-      }}
-    >
-      등록
-    </button>
-  );
+  return <StyledSubmitButton onClick={onClick}>등록</StyledSubmitButton>;
 }
+
 export default SubmitButton;
