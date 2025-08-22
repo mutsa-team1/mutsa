@@ -1,0 +1,61 @@
+@startuml
+title Component Directory - Complaint Service (B2C / B2G)
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+left to right direction
+
+' ========== 패키지 정의 ==========
+
+package pages {
+  package "GeneralComplaintPage" {
+    [index.js]
+    [GeneralComplaintPage.module.css]
+    package components {
+      [WordCloud.js]
+      [ComplaintList.js]
+      [ComplaintCard.js]
+    }
+  }
+
+  package "ReportComplaintPage" {
+    [index.js]
+    [ReportComplaintPage.module.css]
+    package components {
+      '[CategorySelector.js]
+      '[ReportForm.js]
+      '[OrgSearchMap.js]
+    }
+  }
+}
+
+package features {
+  package "complaints" {
+    [generalSlice.js]
+    [reportSlice.js]
+  }
+}
+
+package ui {
+  [Button.js]
+  [Input.js]
+  [Modal.js]
+  [Toast.js]
+}
+
+' ========== 의존 / 사용 관계 ==========
+
+[pages/GeneralComplaintPage/index.js] ..> [pages/GeneralComplaintPage/components/WordCloud.js] : contains
+[pages/GeneralComplaintPage/index.js] ..> [pages/GeneralComplaintPage/components/RatingScale.js] : contains
+[pages/GeneralComplaintPage/index.js] ..> [pages/GeneralComplaintPage/components/ComplaintList.js] : contains
+
+[pages/ReportComplaintPage/index.js] ..> [pages/ReportComplaintPage/components/CategorySelector.js] : contains
+[pages/ReportComplaintPage/index.js] ..> [pages/ReportComplaintPage/components/ReportForm.js] : contains
+[pages/ReportComplaintPage/index.js] ..> [pages/ReportComplaintPage/components/OrgSearchMap.js] : contains
+
+[pages/GeneralComplaintPage/index.js] ..> [features/complaints/generalSlice.js] : uses
+[pages/ReportComplaintPage/index.js] ..> [features/complaints/reportSlice.js] : uses
+
+
+@enduml
